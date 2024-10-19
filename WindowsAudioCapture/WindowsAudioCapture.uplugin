@@ -1,0 +1,25 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.5.4.3",
+	"FriendlyName": "Windows Audio Capture",
+	"Description": "Captures live audio frequency values from the windows default playback device.",
+	"Category": "WAC",
+	"CreatedBy": "Kostas Giannakakis",
+	"CreatedByURL": "https://github.com/kwstasg/WAC",
+	"DocsURL": "https://github.com/kwstasg/WAC",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": false,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"EngineVersion": "5.5.0",
+	"Modules": [
+		{
+			"Name": "WindowsAudioCapture",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}

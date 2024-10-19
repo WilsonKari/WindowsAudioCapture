@@ -1,0 +1,14 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "d:\\unreal_engine\\proyectos_p\\myprojectwac\\plugins\\windowsaudiocapture\\source\\windowsaudiocapture\\private\\windowsaudiocapture.cpp",
+        "ProvidedModule": "",
+        "PCH": "d:\\unreal_engine\\proyectos_p\\myprojectwac\\intermediate\\build\\win64\\x64\\myprojectwaceditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.h.pch",
+        "Includes": [
+            "d:\\unreal_engine\\proyectos_p\\myprojectwac\\plugins\\windowsaudiocapture\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\windowsaudiocapture\\definitions.windowsaudiocapture.h",
+            "d:\\unreal_engine\\proyectos_p\\myprojectwac\\plugins\\windowsaudiocapture\\source\\windowsaudiocapture\\public\\windowsaudiocapture.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
