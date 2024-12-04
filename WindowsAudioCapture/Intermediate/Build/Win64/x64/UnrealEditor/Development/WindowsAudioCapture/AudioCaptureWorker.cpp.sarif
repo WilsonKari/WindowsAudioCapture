@@ -7,7 +7,7 @@
                 {
                     "ruleId": "C5038",
                     "message": {
-                        "text": "data member 'FAudioCaptureWorker::m_sink' will be initialized after data member 'FAudioCaptureWorker::bIsFinished'"
+                        "text": "miembro de datos \"FAudioCaptureWorker::m_sink\" se inicializará después de miembro de datos \"FAudioCaptureWorker::bIsFinished\""
                     },
                     "analysisTarget": {
                         "uri": "file:///D:/UNREAL_ENGINE/PROYECTOS_P/MyProjectWAC/Plugins/WindowsAudioCapture/Source/WindowsAudioCapture/Private/AudioCaptureWorker.cpp"
@@ -29,7 +29,7 @@
                 {
                     "ruleId": "C5038",
                     "message": {
-                        "text": "data member 'FAudioCaptureWorker::bIsFinished' will be initialized after data member 'FAudioCaptureWorker::Thread'"
+                        "text": "miembro de datos \"FAudioCaptureWorker::bIsFinished\" se inicializará después de miembro de datos \"FAudioCaptureWorker::Thread\""
                     },
                     "analysisTarget": {
                         "uri": "file:///D:/UNREAL_ENGINE/PROYECTOS_P/MyProjectWAC/Plugins/WindowsAudioCapture/Source/WindowsAudioCapture/Private/AudioCaptureWorker.cpp"

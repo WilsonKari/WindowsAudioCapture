@@ -3,6 +3,8 @@
 
 #include "Components/ActorComponent.h"
 #include "AudioCaptureWorker.h"
+#include "BeatDetectionSettings.h"
+#include "BeatDetector.h"
 #include "WindowsAudioCaptureComponent.generated.h"
 
 /**
@@ -183,6 +185,20 @@ public:
     UFUNCTION(BlueprintCallable, meta = (DisplayName = "Interpolate Value", Keywords = "Interpolate Value"), Category = "WindowsAudioCapture | Utilities")
     static void BP_InterpolateValue(float InputValue, float InterpSpeed, float DeltaTime, float& OutInterpolatedValue);
 
+    /**
+    * Gets real-time beat detection information from the audio stream.
+    *
+    * @param InFrequencies        Array of frequencies from Get Frequency Array
+    * @param Settings             Optional beat detection settings to customize the analysis
+    * @param OutBeatInfo          Detailed information about the current beat state
+    */
+    UFUNCTION(BlueprintCallable, Category = "Audio Analysis|Rhythm")
+    void BP_GetBeatInfo(
+        const TArray<float>& InFrequencies,
+        const FBeatDetectionSettings& Settings,
+        FBeatInfo& OutBeatInfo
+    );
+
 protected:
     // Called when the game starts
     virtual void BeginPlay() override;
@@ -190,4 +206,7 @@ protected:
 private:
     // Validates frequency calculation parameters
     static bool ValidateFrequencyParameters(float& inFreqLogBase, float& inFreqMultiplier, float& inFreqPower, float& inFreqOffset);
+
+    // Beat detector instance
+    FBeatDetector BeatDetector;
 };

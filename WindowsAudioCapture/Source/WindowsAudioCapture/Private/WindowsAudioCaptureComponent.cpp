@@ -1,7 +1,6 @@
 // Windows Audio Capture (WAC) by KwstasG (Kostas Giannakakis)
 #include "WindowsAudioCaptureComponent.h"
-#include "WindowsAudioCapture.h"
-#include <cmath>
+#include "WindowsAudioCapture.h"    
 
 // Sets default values for this component's properties
 UWindowsAudioCaptureComponent::UWindowsAudioCaptureComponent()
@@ -309,4 +308,28 @@ void UWindowsAudioCaptureComponent::BP_InterpolateValue(float InputValue, float 
     static float CurrentInterpolatedValue = 0.0f;
     CurrentInterpolatedValue = FMath::FInterpTo(CurrentInterpolatedValue, InputValue, DeltaTime, InterpSpeed);
     OutInterpolatedValue = CurrentInterpolatedValue;
+}
+
+// Gets real-time beat detection information from the audio stream
+void UWindowsAudioCaptureComponent::BP_GetBeatInfo(
+    const TArray<float>& InFrequencies,
+    const FBeatDetectionSettings& Settings,
+    FBeatInfo& OutBeatInfo
+)
+{
+    if (InFrequencies.Num() == 0)
+    {
+        OutBeatInfo.IsOnBeat = false;
+        OutBeatInfo.CurrentBPM = 0.0f;
+        OutBeatInfo.BeatStrength = 0.0f;
+        OutBeatInfo.TimeSinceLastBeat = 0.0f;
+        OutBeatInfo.BeatConfidence = 0.0f;
+        return;
+    }
+
+    // Update beat detector with new frequency data
+    BeatDetector.ProcessFrequencies(InFrequencies, Settings);
+    
+    // Get beat information
+    OutBeatInfo = BeatDetector.GetCurrentBeatInfo();
 }

@@ -6,6 +6,7 @@
 
 #include "UObject/GeneratedCppIncludes.h"
 #include "WindowsAudioCapture/Public/WindowsAudioCaptureComponent.h"
+#include "WindowsAudioCapture/Public/BeatDetectionSettings.h"
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 void EmptyLinkFunctionForGeneratedCodeWindowsAudioCaptureComponent() {}
 
@@ -14,6 +15,8 @@ ENGINE_API UClass* Z_Construct_UClass_UActorComponent();
 UPackage* Z_Construct_UPackage__Script_WindowsAudioCapture();
 WINDOWSAUDIOCAPTURE_API UClass* Z_Construct_UClass_UWindowsAudioCaptureComponent();
 WINDOWSAUDIOCAPTURE_API UClass* Z_Construct_UClass_UWindowsAudioCaptureComponent_NoRegister();
+WINDOWSAUDIOCAPTURE_API UScriptStruct* Z_Construct_UScriptStruct_FBeatDetectionSettings();
+WINDOWSAUDIOCAPTURE_API UScriptStruct* Z_Construct_UScriptStruct_FBeatInfo();
 // End Cross Module References
 
 // Begin Class UWindowsAudioCaptureComponent Function BP_ApplyDynamicRangeCompression
@@ -419,6 +422,74 @@ DEFINE_FUNCTION(UWindowsAudioCaptureComponent::execBP_GetAverageSubBassValue)
 	P_NATIVE_END;
 }
 // End Class UWindowsAudioCaptureComponent Function BP_GetAverageSubBassValue
+
+// Begin Class UWindowsAudioCaptureComponent Function BP_GetBeatInfo
+struct Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetBeatInfo_Statics
+{
+	struct WindowsAudioCaptureComponent_eventBP_GetBeatInfo_Parms
+	{
+		TArray<float> InFrequencies;
+		FBeatDetectionSettings Settings;
+		FBeatInfo OutBeatInfo;
+	};
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+		{ "Category", "Audio Analysis|Rhythm" },
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "/**\n    * Gets real-time beat detection information from the audio stream.\n    *\n    * @param InFrequencies        Array of frequencies from Get Frequency Array\n    * @param Settings             Optional beat detection settings to customize the analysis\n    * @param OutBeatInfo          Detailed information about the current beat state\n    */" },
+#endif
+		{ "ModuleRelativePath", "Public/WindowsAudioCaptureComponent.h" },
+#if !UE_BUILD_SHIPPING
+		{ "ToolTip", "Gets real-time beat detection information from the audio stream.\n\n@param InFrequencies        Array of frequencies from Get Frequency Array\n@param Settings             Optional beat detection settings to customize the analysis\n@param OutBeatInfo          Detailed information about the current beat state" },
+#endif
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_InFrequencies_MetaData[] = {
+		{ "NativeConst", "" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_Settings_MetaData[] = {
+		{ "NativeConst", "" },
+	};
+#endif // WITH_METADATA
+	static const UECodeGen_Private::FFloatPropertyParams NewProp_InFrequencies_Inner;
+	static const UECodeGen_Private::FArrayPropertyParams NewProp_InFrequencies;
+	static const UECodeGen_Private::FStructPropertyParams NewProp_Settings;
+	static const UECodeGen_Private::FStructPropertyParams NewProp_OutBeatInfo;
+	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
+	static const UECodeGen_Private::FFunctionParams FuncParams;
+};
+const UECodeGen_Private::FFloatPropertyParams Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetBeatInfo_Statics::NewProp_InFrequencies_Inner = { "InFrequencies", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, METADATA_PARAMS(0, nullptr) };
+const UECodeGen_Private::FArrayPropertyParams Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetBeatInfo_Statics::NewProp_InFrequencies = { "InFrequencies", nullptr, (EPropertyFlags)0x0010000008000182, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(WindowsAudioCaptureComponent_eventBP_GetBeatInfo_Parms, InFrequencies), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_InFrequencies_MetaData), NewProp_InFrequencies_MetaData) };
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetBeatInfo_Statics::NewProp_Settings = { "Settings", nullptr, (EPropertyFlags)0x0010000008000182, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(WindowsAudioCaptureComponent_eventBP_GetBeatInfo_Parms, Settings), Z_Construct_UScriptStruct_FBeatDetectionSettings, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Settings_MetaData), NewProp_Settings_MetaData) }; // 2851578037
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetBeatInfo_Statics::NewProp_OutBeatInfo = { "OutBeatInfo", nullptr, (EPropertyFlags)0x0010000000000180, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(WindowsAudioCaptureComponent_eventBP_GetBeatInfo_Parms, OutBeatInfo), Z_Construct_UScriptStruct_FBeatInfo, METADATA_PARAMS(0, nullptr) }; // 1825895711
+const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetBeatInfo_Statics::PropPointers[] = {
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetBeatInfo_Statics::NewProp_InFrequencies_Inner,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetBeatInfo_Statics::NewProp_InFrequencies,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetBeatInfo_Statics::NewProp_Settings,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetBeatInfo_Statics::NewProp_OutBeatInfo,
+};
+static_assert(UE_ARRAY_COUNT(Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetBeatInfo_Statics::PropPointers) < 2048);
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetBeatInfo_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UWindowsAudioCaptureComponent, nullptr, "BP_GetBeatInfo", nullptr, nullptr, Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetBeatInfo_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetBeatInfo_Statics::PropPointers), sizeof(Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetBeatInfo_Statics::WindowsAudioCaptureComponent_eventBP_GetBeatInfo_Parms), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04420401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetBeatInfo_Statics::Function_MetaDataParams), Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetBeatInfo_Statics::Function_MetaDataParams) };
+static_assert(sizeof(Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetBeatInfo_Statics::WindowsAudioCaptureComponent_eventBP_GetBeatInfo_Parms) < MAX_uint16);
+UFunction* Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetBeatInfo()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetBeatInfo_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+DEFINE_FUNCTION(UWindowsAudioCaptureComponent::execBP_GetBeatInfo)
+{
+	P_GET_TARRAY_REF(float,Z_Param_Out_InFrequencies);
+	P_GET_STRUCT_REF(FBeatDetectionSettings,Z_Param_Out_Settings);
+	P_GET_STRUCT_REF(FBeatInfo,Z_Param_Out_OutBeatInfo);
+	P_FINISH;
+	P_NATIVE_BEGIN;
+	P_THIS->BP_GetBeatInfo(Z_Param_Out_InFrequencies,Z_Param_Out_Settings,Z_Param_Out_OutBeatInfo);
+	P_NATIVE_END;
+}
+// End Class UWindowsAudioCaptureComponent Function BP_GetBeatInfo
 
 // Begin Class UWindowsAudioCaptureComponent Function BP_GetFrequencyArray
 struct Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetFrequencyArray_Statics
@@ -862,6 +933,7 @@ void UWindowsAudioCaptureComponent::StaticRegisterNativesUWindowsAudioCaptureCom
 		{ "BP_GetAverageHighValue", &UWindowsAudioCaptureComponent::execBP_GetAverageHighValue },
 		{ "BP_GetAverageMidValue", &UWindowsAudioCaptureComponent::execBP_GetAverageMidValue },
 		{ "BP_GetAverageSubBassValue", &UWindowsAudioCaptureComponent::execBP_GetAverageSubBassValue },
+		{ "BP_GetBeatInfo", &UWindowsAudioCaptureComponent::execBP_GetBeatInfo },
 		{ "BP_GetFrequencyArray", &UWindowsAudioCaptureComponent::execBP_GetFrequencyArray },
 		{ "BP_GetPeakFrequency", &UWindowsAudioCaptureComponent::execBP_GetPeakFrequency },
 		{ "BP_GetSpecificFrequencyValue", &UWindowsAudioCaptureComponent::execBP_GetSpecificFrequencyValue },
@@ -901,6 +973,7 @@ struct Z_Construct_UClass_UWindowsAudioCaptureComponent_Statics
 		{ &Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetAverageHighValue, "BP_GetAverageHighValue" }, // 1365449783
 		{ &Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetAverageMidValue, "BP_GetAverageMidValue" }, // 225117946
 		{ &Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetAverageSubBassValue, "BP_GetAverageSubBassValue" }, // 155504400
+		{ &Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetBeatInfo, "BP_GetBeatInfo" }, // 2067280246
 		{ &Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetFrequencyArray, "BP_GetFrequencyArray" }, // 696368062
 		{ &Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetPeakFrequency, "BP_GetPeakFrequency" }, // 943756886
 		{ &Z_Construct_UFunction_UWindowsAudioCaptureComponent_BP_GetSpecificFrequencyValue, "BP_GetSpecificFrequencyValue" }, // 372252820
@@ -953,10 +1026,10 @@ DEFINE_VTABLE_PTR_HELPER_CTOR(UWindowsAudioCaptureComponent);
 struct Z_CompiledInDeferFile_FID_MyProjectWAC_Plugins_WindowsAudioCapture_Source_WindowsAudioCapture_Public_WindowsAudioCaptureComponent_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_UWindowsAudioCaptureComponent, UWindowsAudioCaptureComponent::StaticClass, TEXT("UWindowsAudioCaptureComponent"), &Z_Registration_Info_UClass_UWindowsAudioCaptureComponent, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UWindowsAudioCaptureComponent), 4103203924U) },
+		{ Z_Construct_UClass_UWindowsAudioCaptureComponent, UWindowsAudioCaptureComponent::StaticClass, TEXT("UWindowsAudioCaptureComponent"), &Z_Registration_Info_UClass_UWindowsAudioCaptureComponent, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UWindowsAudioCaptureComponent), 680479829U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_MyProjectWAC_Plugins_WindowsAudioCapture_Source_WindowsAudioCapture_Public_WindowsAudioCaptureComponent_h_2749053855(TEXT("/Script/WindowsAudioCapture"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_MyProjectWAC_Plugins_WindowsAudioCapture_Source_WindowsAudioCapture_Public_WindowsAudioCaptureComponent_h_2319816303(TEXT("/Script/WindowsAudioCapture"),
 	Z_CompiledInDeferFile_FID_MyProjectWAC_Plugins_WindowsAudioCapture_Source_WindowsAudioCapture_Public_WindowsAudioCaptureComponent_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_MyProjectWAC_Plugins_WindowsAudioCapture_Source_WindowsAudioCapture_Public_WindowsAudioCaptureComponent_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

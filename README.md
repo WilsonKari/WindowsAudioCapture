@@ -1,89 +1,144 @@
-# WAC
-UE5 Visualization Plugin - Windows Audio Capture (WAC) is an Unreal Engine 5 plugin that captures live audio from the windows default audio device and analyse it to frequency values. 
+# Windows Audio Capture (WAC)
+An advanced Unreal Engine plugin for real-time audio visualization and beat detection.
 
-Practically you can create any audio visualisation through Unreal Engine's BP system by adding custom nodes that react live with your windows audio.
+## Overview
+Windows Audio Capture (WAC) is a powerful Unreal Engine plugin that captures live audio from your Windows default audio device and transforms it into usable frequency data and beat detection information. This plugin enables developers to create dynamic audio-reactive experiences directly within Unreal Engine's Blueprint system.
 
-UE 5.4.3b (4/8/2024):
--------------
-New Release 5.4.3b enhanced for stability and performance
+## Latest Version (5.4.3b Enhanced - 2024)
+### New Features
+- **Beat Detection System**:
+  - Real-time beat detection with confidence metrics
+  - BPM (Beats Per Minute) calculation
+  - Beat strength analysis
+  - Customizable detection parameters
+  - Time-since-last-beat tracking
 
-introducing new features:
--Extra outputs for Left and Rigth Channel Separation
--Extra output in dB
--Interpolation for smoother visualisations
--Dynamic Range Compression in order to boost more silent frequencies
--Normalization in order to set custom range of the output
+- **Audio Analysis**:
+  - Left and Right Channel Separation
+  - dB output support
+  - Smooth interpolation for visualizations
+  - Dynamic Range Compression
+  - Customizable output normalization
 
-Plugin v5.4.3b : [here](https://github.com/kwstasg/WAC/releases/download/5.4.3b/WindowsAudioCapture.zip)
+## Installation
+1. Create a `Plugins` folder in your project directory if it doesn't exist
+2. Copy the `WindowsAudioCapture` folder into your project's `Plugins` folder
+3. Restart the Unreal Editor
+4. Enable the plugin in Edit → Plugins → Audio → Windows Audio Capture
 
-Demo Project v5.4.3b: [here](https://github.com/kwstasg/WAC/releases/download/5.4.3b/WAC_Plugin_5.4.3b.Demo.Project.zip)
+## Quick Start Guide
 
-Runtime Demo v5.4.3b: [here](https://github.com/kwstasg/WAC/releases/download/5.4.3b/WAC.Plugin.5_4_3b.Runtime.zip)
+### Basic Setup
+1. Create a new Actor Blueprint
+2. Add a Windows Audio Capture Component
+3. Add your desired visual components (lights, meshes, etc.)
 
+### Basic Audio Visualization
+```blueprint
+Event Tick
+  ↳ [Add Delay] (Recommended: 0.016 for 60fps)
+    ↳ Get Frequency Array
+      ↳ [Your visualization logic]
+```
 
-[![Video](https://i9.ytimg.com/vi_webp/zEFxnGkhoZI/mqdefault.webp?v=66af8389&sqp=COSmwrUG&rs=AOn4CLCVPgLxJ7DegoVVbyluEtLzwabX0w)](https://www.youtube.com/watch?v=zEFxnGkhoZI)
+### Beat Detection Setup
+```blueprint
+Event Tick
+  ↳ Make Beat Detection Settings
+     - Min BPM: 60.0
+     - Max BPM: 200.0
+     - Beat Threshold: 0.5
+     - Bass Emphasis: 1.2
+     - Minimum Energy: 0.05
+  ↳ Get Beat Info
+     Outputs:
+     - Is On Beat (Boolean)
+     - Beat Strength (Float 0-1)
+     - Beat Confidence (Float 0-1)
+     - Current BPM (Float)
+     - Time Since Last Beat (Float)
+```
 
-UE 5.4.3 (25/7/2024):
--------------
-Updated to latest UE 5.4.3
+## Available Functions
 
-Plugin v5.4.3 : [here](https://github.com/kwstasg/WAC/releases/download/5.4.3/WindowsAudioCapture.zip)
+### Audio Analysis
+- `Get Frequency Array`: Returns the current audio frequency spectrum
+- `Get Specific Freq Value`: Get the amplitude at a specific frequency
+- `Get Average Freq Value in Range`: Calculate average amplitude within a frequency range
+- `Get Average Bass Value`: Get the average amplitude in bass frequencies
+- `Get Average Subbass Value`: Get the average amplitude in sub-bass frequencies
 
-Demo Project v5.4.3: [here](https://github.com/kwstasg/WAC/releases/download/5.4.3/WAC_Plugin_.5.4.3.Demo.Project.zip)
+### Beat Detection
+- `Get Beat Info`: Returns comprehensive beat detection information
+- `Make Beat Detection Settings`: Create customized beat detection parameters
 
+## Example Use Cases
 
-UE 4.25:
--------------
-Updated to latest UE 4.25.3 release, added Shift Colors Hue Functionality
+### 1. Basic Light Pulse
+```blueprint
+Get Beat Info
+  ↳ [Is On Beat]
+     ↳ Set Light Intensity (8000 * Beat Strength)
+  ↳ [False]
+     ↳ Timeline "FadeOut"
+```
 
-Color 1: Hue Shift Left/Right: Keboard keys 1/2
-Color 2: Hue Shift Left/Right: Keboard keys 3/4
+### 2. BPM-Based Animation
+```blueprint
+Get Beat Info
+  ↳ [Current BPM]
+     ↳ Set Actor Rotation Speed
+```
 
-Fixed "Highly Volatile Noise Pattern" Bug
+### 3. Confidence-Based Effects
+```blueprint
+Get Beat Info
+  ↳ [Beat Confidence]
+     ↳ Set Particle Emission Rate
+```
 
-Runtime Demo v4.25.3: [here](https://github.com/kwstasg/WAC/releases/download/4.25.3/WAC_Plugin_4.25.3_Runtime_Demo.zip) 
+## Beat Detection Parameters Guide
 
-Runtime Demo v4.25.3: [here](https://github.com/kwstasg/WAC/releases/download/4.25.3/WAC_Plugin_4.25.3_Runtime_DemoVR.zip) (with VR Support)
+### BPM Range (Min BPM, Max BPM)
+- **Min BPM**: Lowest expected beats per minute (default: 60)
+- **Max BPM**: Highest expected beats per minute (default: 200)
+- Adjust based on your music genre:
+  - EDM/Dance: 120-140 BPM
+  - Hip-Hop: 85-95 BPM
+  - Rock: 100-120 BPM
 
-UE 4.20:
--------------
-Plugin v4.20.3 : [here](https://github.com/kwstasg/WAC/releases/download/4.20.3/WAC_Plugin_4.20.3.rar)
+### Beat Threshold (0.0 - 1.0)
+- Controls sensitivity of beat detection
+- Lower values (0.1-0.3): More sensitive, may detect subtle beats
+- Higher values (0.7-0.9): Only detect strong beats
+- Default: 0.5
 
-Demo Project v4.20.3: [here](https://github.com/kwstasg/WAC/releases/download/4.20.3/WAC_Plugin_4.20.3.Demo.Project.rar) 
+### Bass Emphasis (1.0+)
+- Multiplier for bass frequencies in beat detection
+- Higher values emphasize bass-heavy beats
+- Default: 1.2
 
-Runtime Demo v4.20.3: [here](https://github.com/kwstasg/WAC/releases/download/4.20.3/WAC_Plugin_4.20.3_Runtime_Demo.rar) (with VR Support)
+### Minimum Energy
+- Threshold for overall audio energy
+- Helps filter out background noise
+- Default: 0.05
 
-UE 4.17:
--------------
-Plugin v4.17.2 : [here](https://github.com/kwstasg/WAC/releases/download/WAC_Plugin_Packaged_4.17.2/WAC_Plugin_Packaged_4.17.2.rar)
+## Performance Tips
+1. Use delay nodes with Get Frequency Array (0.016s for 60fps)
+2. Cache beat detection settings instead of creating them every tick
+3. Use Timeline nodes for smooth transitions
+4. Implement LOD (Level of Detail) for complex visualizations
 
-UE 4.16:
--------------
-Plugin v4.16.1 (updated to VS2017): [here](https://github.com/kwstasg/WAC/releases/download/WAC_Plugin_Packaged_4.16.1/WAC_Plugin_Packaged_4.16.1.rar)
+## Support
+- Compatible with Unreal Engine 5.4.3b and later
+- Windows platform only
+- VR compatible
 
+## Credits
+Original plugin by kwstasg
+Beat Detection enhancement by [Your Credits]
 
-Plugin v4.16: [here](https://github.com/kwstasg/WAC/releases/download/WAC_Plugin_Packaged_4.16/WAC_Plugin_Packaged_4.16.rar)
-
-UE 4.15:
--------------
-Demo v4.15: [here](https://www.dropbox.com/s/t0irs476zrjkwwf/WAC_Demo.rar?dl=0) (Now with VR Support)
-
-Demo Project v4.15: [here](https://github.com/kwstasg/WAC/releases/download/WAC_Project_4.15/WAC_Project4.15.zip) 
-
-Plugin v4.15: [here](https://github.com/kwstasg/WAC/releases/download/WAC_Plugin_Packaged_4.15/WAC_Plugin_Packaged_4.15.rar)
-
-Video:
--------------
-[![Video](https://img.youtube.com/vi/tyapMcqbpHk/0.jpg)](https://www.youtube.com/watch?v=tyapMcqbpHk)
-
-
-Instructions:
--------------
-1. Add WindowsAudioCapture inside Plugins folder in your project's folder ex. YOUR_PROJECT\Plugins\WindowsAudioCapture (if you dont have a Plugins folder feel free to crete one)
-2. Create an Actor BP
-3. Add a WindowsAudioCapture Component
-4. on tick event add a Get Frequency Array (its better to use a delay because its not necessary to capture frequencies all the time)
-5. Analyse Frequency Array as you preffer there are 4 functions so far to assist you Get Specific Freq Value, Get Average Freq Value in Range, Get Average Bass Value , Get Average Subbass Value
-6. Use the output value to move/rescale other actors or adjust light brightnes or color...let your fantasy guide you
-
-
+## Links
+- [Latest Release](https://github.com/kwstasg/WAC/releases)
+- [Demo Project](https://github.com/kwstasg/WAC/releases)
+- [Tutorial Video](https://www.youtube.com/watch?v=zEFxnGkhoZI)
