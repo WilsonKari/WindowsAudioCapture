@@ -885,6 +885,7 @@
             "c:\\program files (x86)\\windows kits\\10\\include\\10.0.22621.0\\ucrt\\math.h",
             "c:\\program files\\epic games\\ue_5.5\\engine\\source\\thirdparty\\kiss_fft\\kiss_fft129\\tools\\kiss_fftnd.h",
             "d:\\unreal_engine\\proyectos_p\\myprojectwac\\plugins\\windowsaudiocapture\\source\\windowsaudiocapture\\public\\beatdetector.h",
+            "d:\\unreal_engine\\proyectos_p\\myprojectwac\\plugins\\windowsaudiocapture\\source\\windowsaudiocapture\\public\\circularbuffer.h",
             "d:\\unreal_engine\\proyectos_p\\myprojectwac\\plugins\\windowsaudiocapture\\intermediate\\build\\win64\\unrealeditor\\inc\\windowsaudiocapture\\uht\\windowsaudiocapturecomponent.generated.h",
             "d:\\unreal_engine\\proyectos_p\\myprojectwac\\plugins\\windowsaudiocapture\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\windowsaudiocapture\\permoduleinline.gen.cpp",
             "c:\\program files\\epic games\\ue_5.5\\engine\\source\\runtime\\core\\public\\hal\\permoduleinline.inl"

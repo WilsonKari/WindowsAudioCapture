@@ -7,14 +7,20 @@ constexpr int32 ENERGY_HISTORY_SIZE = 43; // ~1 second at 44.1kHz when analyzing
 constexpr float MIN_TIME_BETWEEN_BEATS = 0.2f; // Minimum time between beats (300 BPM max)
 
 FBeatDetector::FBeatDetector()
-    : LastBeatTime(0.0f)
+    : EnergyHistory(ENERGY_HISTORY_SIZE)
+    , LastBeatTime(0.0f)
     , AverageBeatInterval(0.0f)
 {
-    EnergyHistory.Init(0.0f, ENERGY_HISTORY_SIZE);
+}
+
+float FBeatDetector::CalculateAverageEnergy() const
+{
+    return EnergyHistory.GetAverage();
 }
 
 void FBeatDetector::ProcessFrequencies(const TArray<float>& InFrequencies, const FBeatDetectionSettings& Settings)
 {
+    // Reset beat info if no input
     if (InFrequencies.Num() == 0)
     {
         CurrentBeatInfo = FBeatInfo();
@@ -24,9 +30,15 @@ void FBeatDetector::ProcessFrequencies(const TArray<float>& InFrequencies, const
     // Calculate current energy
     float CurrentEnergy = CalculateEnergy(InFrequencies);
     
-    // Update energy history
-    EnergyHistory.RemoveAt(0);
-    EnergyHistory.Add(CurrentEnergy);
+    // Add to circular buffer
+    EnergyHistory.Push(CurrentEnergy);
+    
+    // Make sure we have enough history before detecting beats
+    if (!EnergyHistory.IsFull())
+    {
+        CurrentBeatInfo = FBeatInfo();
+        return;
+    }
     
     // Detect beat
     CurrentBeatInfo.IsOnBeat = DetectBeat(CurrentEnergy, Settings);
@@ -38,34 +50,30 @@ void FBeatDetector::ProcessFrequencies(const TArray<float>& InFrequencies, const
         
         if (TimeSinceLastBeat >= MIN_TIME_BETWEEN_BEATS)
         {
-            UpdateBPM(TimeSinceLastBeat);
+            UpdateBPM(TimeSinceLastBeat, Settings);
             LastBeatTime = CurrentTime;
         }
     }
     
-    // Calculate beat strength and average energy
-    float AverageEnergy = 0.0f;
-    for (float Energy : EnergyHistory)
-    {
-        AverageEnergy += Energy;
-    }
-    AverageEnergy /= EnergyHistory.Num();
+    // Calculate average energy using the optimized method
+    float AverageEnergy = CalculateAverageEnergy();
     
-    CurrentBeatInfo.BeatStrength = CurrentEnergy / (AverageEnergy * Settings.BeatThreshold);
-    CurrentBeatInfo.BeatStrength = FMath::Clamp(CurrentBeatInfo.BeatStrength, 0.0f, 1.0f);
+    // Prevent division by zero in energy ratio calculation
+    const float MIN_ENERGY = 1e-6f;
+    AverageEnergy = FMath::Max(AverageEnergy, MIN_ENERGY);
     
-    // Calculate beat confidence based on energy variance
-    float EnergyVariance = 0.0f;
-    for (float Energy : EnergyHistory)
-    {
-        float Diff = Energy - AverageEnergy;
-        EnergyVariance += (Diff * Diff);
-    }
-    EnergyVariance /= EnergyHistory.Num();
+    // Calculate normalized beat strength with improved scaling and safety
+    float EnergyRatio = (CurrentEnergy - AverageEnergy) / AverageEnergy;
+    CurrentBeatInfo.BeatStrength = FMath::GetMappedRangeValueClamped(
+        FVector2D(Settings.BeatThreshold, Settings.BeatThreshold * 3.0f),
+        FVector2D(0.0f, 1.0f),
+        EnergyRatio
+    );
     
-    // Normalize variance and calculate confidence factors
-    float EnergyCertainty = FMath::Clamp(EnergyVariance / (AverageEnergy * AverageEnergy + 1e-6f), 0.0f, 1.0f);
-    float CurrentEnergyRatio = FMath::Clamp(CurrentEnergy / (AverageEnergy + 1e-6f), 0.0f, 1.0f);
+    // Calculate beat confidence using optimized variance calculation
+    float EnergyVariance = EnergyHistory.CalculateVariance(AverageEnergy);
+    float EnergyCertainty = FMath::Clamp(EnergyVariance / (AverageEnergy * AverageEnergy + MIN_ENERGY), 0.0f, 1.0f);
+    float CurrentEnergyRatio = FMath::Clamp(CurrentEnergy / (AverageEnergy + MIN_ENERGY), 0.0f, 1.0f);
     
     // Calculate final confidence value
     CurrentBeatInfo.BeatConfidence = EnergyCertainty * CurrentEnergyRatio;
@@ -99,24 +107,46 @@ float FBeatDetector::CalculateEnergy(const TArray<float>& InFrequencies) const
 
 bool FBeatDetector::DetectBeat(float CurrentEnergy, const FBeatDetectionSettings& Settings)
 {
-    if (CurrentEnergy < Settings.MinimumEnergy)
-        return false;
-
-    float AverageEnergy = 0.0f;
-    for (float Energy : EnergyHistory)
+    // Safety check for minimum energy and history
+    if (CurrentEnergy < Settings.MinimumEnergy || !EnergyHistory.IsFull())
     {
-        AverageEnergy += Energy;
+        return false;
     }
-    AverageEnergy /= EnergyHistory.Num();
 
+    float AverageEnergy = CalculateAverageEnergy();
     return CurrentEnergy > (AverageEnergy * Settings.BeatThreshold);
 }
 
-void FBeatDetector::UpdateBPM(float DeltaTime)
+void FBeatDetector::UpdateBPM(float DeltaTime, const FBeatDetectionSettings& Settings)
 {
-    // Simple moving average for BPM
-    const float ALPHA = 0.2f; // Smoothing factor
-    float InstantBPM = 60.0f / DeltaTime; // Convert to beats per minute
+    // Protect against division by zero or negative values
+    if (DeltaTime <= 0.0f)
+    {
+        return;
+    }
+
+    // Convert to beats per minute with initial protection
+    float InstantBPM = 60.0f / DeltaTime;
+
+    // Validate against settings bounds and physical limits
+    const float MIN_PHYSICAL_BPM = 30.0f;  // Extremely slow music
+    const float MAX_PHYSICAL_BPM = 300.0f; // Extremely fast music
+
+    // First clamp to physical limits
+    InstantBPM = FMath::Clamp(InstantBPM, MIN_PHYSICAL_BPM, MAX_PHYSICAL_BPM);
+
+    // Then clamp to user settings if valid
+    if (CurrentBeatInfo.CurrentBPM > 0.0f)
+    {
+        // Prevent sudden large changes in BPM (max 20% change)
+        const float MAX_BPM_CHANGE = 0.2f;
+        float MinAllowedBPM = CurrentBeatInfo.CurrentBPM * (1.0f - MAX_BPM_CHANGE);
+        float MaxAllowedBPM = CurrentBeatInfo.CurrentBPM * (1.0f + MAX_BPM_CHANGE);
+        InstantBPM = FMath::Clamp(InstantBPM, MinAllowedBPM, MaxAllowedBPM);
+    }
+
+    // Apply smoothing with improved alpha
+    const float ALPHA = 0.1f; // Reduced for more stable readings
     
     if (AverageBeatInterval == 0.0f)
     {
@@ -127,5 +157,6 @@ void FBeatDetector::UpdateBPM(float DeltaTime)
         AverageBeatInterval = (1.0f - ALPHA) * AverageBeatInterval + ALPHA * InstantBPM;
     }
     
-    CurrentBeatInfo.CurrentBPM = AverageBeatInterval;
+    // Final clamping to user settings
+    CurrentBeatInfo.CurrentBPM = FMath::Clamp(AverageBeatInterval, Settings.MinBPM, Settings.MaxBPM);
 }

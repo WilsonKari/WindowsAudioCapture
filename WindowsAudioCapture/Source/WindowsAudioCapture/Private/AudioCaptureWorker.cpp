@@ -11,10 +11,10 @@ std::atomic<int32> FAudioCaptureWorker::ThreadCounter(0);
 std::mutex FAudioCaptureWorker::workerMutex;
 
 FAudioCaptureWorker::FAudioCaptureWorker()
-    : m_listener(16, WAVE_FORMAT_PCM, 4, 0)
-    , m_sink()
+    : Thread(NULL)
     , bIsFinished(false)
-    , Thread(NULL)
+    , m_listener(16, WAVE_FORMAT_PCM, 4, 0)
+    , m_sink()
 {
     // Higher overall ThreadCounter to avoid duplicated names
     FAudioCaptureWorker::ThreadCounter++;

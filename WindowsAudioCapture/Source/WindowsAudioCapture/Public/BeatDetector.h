@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "BeatDetectionSettings.h"
+#include "CircularBuffer.h"
 
 /**
  * Class that handles beat detection and analysis of audio data
@@ -28,14 +29,20 @@ private:
     // Current beat information
     FBeatInfo CurrentBeatInfo;
 
-    // Energy history for beat detection
-    TArray<float> EnergyHistory;
+    // Energy history for beat detection using optimized circular buffer
+    Audio::TCircularBuffer<float> EnergyHistory;
     
     // Time of last beat detection
     float LastBeatTime;
     
     // Running average of beat intervals for BPM calculation
     float AverageBeatInterval;
+
+    /**
+     * Calculate the average energy from the energy history
+     * @return Average energy value, 0 if history is empty
+     */
+    float CalculateAverageEnergy() const;
 
     /**
      * Calculate energy from frequency data
@@ -53,8 +60,9 @@ private:
     bool DetectBeat(float CurrentEnergy, const FBeatDetectionSettings& Settings);
 
     /**
-     * Update BPM calculation
+     * Update BPM calculation with time since last beat
      * @param DeltaTime Time since last beat
+     * @param Settings Beat detection settings for BPM limits
      */
-    void UpdateBPM(float DeltaTime);
+    void UpdateBPM(float DeltaTime, const FBeatDetectionSettings& Settings);
 };
